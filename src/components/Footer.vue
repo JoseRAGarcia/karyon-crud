@@ -30,7 +30,7 @@ export default {
     .assinatura{
         font-weight: 300;
         font-size: 1.1rem;
-        padding: 2%;
+        padding-right: 2%;
     }
 
     #heart{

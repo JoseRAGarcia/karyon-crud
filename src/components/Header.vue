@@ -34,42 +34,35 @@ export default {
       0% { opacity: 0; }
       100% { opacity: 1; } 
     }
-
     @-moz-keyframes fadeIn {
         0% { opacity: 0;}
         100% { opacity: 1; }
     }
-
     @-o-keyframes fadeIn {
         0% { opacity: 0; }
         100% { opacity: 1; }
     }
-
     @keyframes fadeIn {
         0% { opacity: 0; }
         100% { opacity: 1; }
     }
-
     header{
       color: #fff;
       background-color: #2f4fa2;
       align-items: center;
     }
-
     .fadeIn {
         -webkit-animation: fadeIn 3s ease-in-out;
         -moz-animation: fadeIn 3s ease-in-out;
         -o-animation: fadeIn 3s ease-in-out;
         animation: fadeIn 3s ease-in-out;
     }
-
     .fadeIn1 {
         -webkit-animation: fadeIn 0.5s ease-in-out;
         -moz-animation: fadeIn 0.5s ease-in-out;
         -o-animation: fadeIn 0.5s ease-in-out;
         animation: fadeIn 0.5s ease-in-out;
     }
-
     .logo{
         padding: 10%;
     }
@@ -88,6 +81,4 @@ export default {
     .router-link-exact-active{
       color: orange;
     }
-    
-
 </style>

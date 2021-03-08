@@ -32,7 +32,7 @@ export default {
   .home-card{
     margin-left: 2%;
     margin-right: 2%;
-    margin-top: 10px;
+    
     width: auto;
   }
   .home-card h1{
