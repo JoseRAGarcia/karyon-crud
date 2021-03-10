@@ -4,7 +4,7 @@
         <img src="@/assets/logo.png" alt="Logotipo comemorativo de 20 anos da Karyon" class="logo fadeIn">
     </div>
     <div class="md-layout-item md-title">
-      CRUD
+      
     </div>
     <div class="md-layout-item md-subhead text-right main-menu"> 
       <router-link to="/" class="menu">
