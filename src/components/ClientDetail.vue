@@ -1,5 +1,5 @@
 <template>
-<div class="dadosCliente">
+<div class="dadosCliente fadeIn1">
     <h1>{{ cliente.nomeFantasia }} (Nome Fantasia)</h1>
     <hr>
     <div class="md-layout">
@@ -8,7 +8,8 @@
             <p><b>Razão Social: </b>{{ cliente.razaoSocial }}</p>
             <p><b>CNPJ: </b>{{ cliente.cnpj }}</p>
             <p><b>E-mail: </b>{{ cliente.email }}</p>
-            <p><b>Telefone: </b>{{ cliente.telefone }}</p>        
+            <p><b>Telefone: </b>{{ cliente.telefone }}</p>
+            <router-link :to="{path: '/equipamentos/' + cliente.idCliente}" class="btn btn-primary btn-equipamentos">EQUIPAMENTOS DO CLIENTE</router-link>    
         </div>
         <div class="dadosEndereco text-left md-layout-item">
             <p><b>Endereço: </b>{{ cliente.endereco }}</p>
@@ -43,7 +44,14 @@ export default {
         }
     },
 
-    async created() {
+    beforeCreate(){
+        if(!localStorage.getItem('token')) {
+            this.$router.push('/')
+            alert('Realizar login')
+        }
+    },
+
+   async created() {
         await http.get('cliente/' + this.$route.params.idCliente, {
             headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -70,6 +78,9 @@ export default {
 .dadosCliente h1{
     color: #2f4fa2;
     font-size: 200%;
+}
+.btn-equipamentos {
+    margin-top: 10%;
 }
 
 </style>
