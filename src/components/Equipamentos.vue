@@ -125,6 +125,7 @@ export default {
     },
 
     methods: {
+        //Lista todos os equipamentos do cliente
         listarEquipamentosCliente() {
             http.get('equipamento-cliente/cliente/' + this.$route.params.idCliente, {
                 headers: {
@@ -137,6 +138,7 @@ export default {
             this.listaFornecedores()
         },
 
+        //Muda a classe hiden para cadastro ou atualização de um equipamento
         mudarClasse() {
             if(document.querySelector('#hiden').className == "hiden"){
                 document.querySelector('#hiden').className = "shown"; 
@@ -144,6 +146,8 @@ export default {
                 document.querySelector('#hiden').className = "hiden"; 
             }                                  
         },
+
+        //Lista todos equipamentos
         listaEquipamentos() {
             http.get('equipamento', {
                 headers: {
@@ -153,6 +157,8 @@ export default {
                 this.equipamentos = res.data                
             })
         },
+
+        //Lista todos os fornecedores
         listaFornecedores() {
             http.get('fornecedor-equipamento', {
                 headers: {
@@ -163,6 +169,8 @@ export default {
                 
             })
         },
+
+        //Faz o cadastro ou atualização de equipamentos
         salvarEquipamento() {
             if(this.equipamentoId == '') {
                 http.post('equipamento-cliente/cliente/' + this.$route.params.idCliente, this.novoEquipamento, {
@@ -189,6 +197,8 @@ export default {
                 })
             }
         },
+
+        //Prepara para a atualização do equipamento
         editarEquipamento(equipamento) {
             this.mudarClasse()
             this.equipamentoId = equipamento.equipamento.id

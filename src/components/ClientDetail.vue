@@ -51,6 +51,7 @@ export default {
         }
     },
 
+   //Lista todas as informações do cliente 
    async created() {
         await http.get('cliente/' + this.$route.params.idCliente, {
             headers: {
