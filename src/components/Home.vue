@@ -28,13 +28,14 @@ export default {
             senha: ''
         }        
     },
+    
     methods: {
         async submit() {
            await http.post('login', {
                     email: this.email,
                     senha: this.senha
                 }).then(res => {
-                    localStorage.setItem('token',res.data.token)
+                    localStorage.setItem('token', res.data.token)                    
                 })
 
             this.$router.push('/gerenciamento')

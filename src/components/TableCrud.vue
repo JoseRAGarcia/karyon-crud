@@ -1,12 +1,7 @@
 <template>
   <div class="crud fadeIn1">
-      
-    <div class="selectCrud form-group">        
-        <input type="search" placeholder="Pesquisar" class="form-control">
-    </div>
-    <hr> 
     <div id="hiden" class="hiden">
-		<form @submit.prevent="criarCliente">
+		<form @submit.prevent="salvarCliente">
 			<div class="formCrud form-group">
 				<input type="text" name="" class="form-control" placeholder="Nome Fantasia" v-model="novoCliente.nomeFantasia">    
 				<input type="text" name="" class="form-control" placeholder="Razão Social" v-model="novoCliente.razaoSocial">
@@ -45,7 +40,7 @@
                 <label for="expiracaoBioslab">Expiração do Contrato Bioslab</label>
                 <div>
                     <input type="submit" name="" value="ENVIAR" class="btn btn-primary btnFormGroup">
-                    <button @click="mudarClasse" class="btn btn-primary btnFormGroup">CANCELAR</button>
+                    <div @click="mudarClasse" class="btn btn-primary btnFormGroup">CANCELAR</div>
                 </div>
 			</div>
 		</form>
@@ -60,8 +55,9 @@
 			<th scope="col"></th>
 			<th scope="col">Id do Cliente</th>
 			<th scope="col">Nome Fantasia</th>
-			<th scope="col"></th>
-			<th scope="col"></th>
+            <th scope="col">Cliente Facelab</th>
+			<th scope="col">Cliente Bioslab</th>			
+            <th scope="col">Cliente Midialab</th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 		</thead>
@@ -74,10 +70,11 @@
                 </th>
 				<td>{{ cliente.idCliente }}</td>
 				<td>{{ cliente.nomeFantasia }}</td>
-				<td>{{ cliente.clienteFacelab }}</td>
-				<td></td>
-				<td><a href="#"><i class="material-icons" style="color: #2f4fa2">mode_edit</i></a></td>
-				<td><a href="#"><i class="material-icons" style="color: red">delete</i></a></td>
+                <td>{{ cliente.clienteFacelab }}</td>
+				<td>{{ cliente.clienteBioslab }}</td>                
+				<td>{{ cliente.clienteMidialab }}</td>
+				<td @click="editarCliente(cliente)"><i class="material-icons" style="color: #2f4fa2; cursor: pointer">mode_edit</i></td>
+				<td><i class="material-icons" style="color: red; cursor: pointer">delete</i></td>
 			</tr>
 		</tbody>
 	</table>
@@ -93,6 +90,7 @@ export default {
     data() {
         return{
             clientes: [],
+            clienteId: '',
             novoCliente: {
                 nomeFantasia: '',
                 razaoSocial: '',
@@ -131,10 +129,9 @@ export default {
                         this.clientes.push(res.data[cliente])                    
                     }  
                 }           
-                // console.log(res.data)
+               
             })
         },
-
         mudarClasse() {
             if(document.querySelector('#hiden').className == "hiden"){
                 document.querySelector('#hiden').className = "shown"; 
@@ -142,18 +139,37 @@ export default {
                 document.querySelector('#hiden').className = "hiden"; 
             }                       
         },
-        criarCliente() {
-           http.post('cliente', this.novoCliente, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                } 
-            }).then(() => {
-                this.novoCliente = {}
-                alert('Cliente salvo com sucesso!')
-                this.listarClientes()                
-            }).catch(e => {
-                console.log(e.response)
-            })          
+        salvarCliente() {
+            if(this.clienteId == '') {
+                http.post('cliente', this.novoCliente, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    } 
+                }).then(() => {
+                    this.novoCliente = {}
+                    alert('Cliente salvo com sucesso!')
+                    this.mudarClasse()
+                    this.listarClientes()
+                })
+            }else {
+                http.put('cliente/' + this.clienteId, this.novoCliente, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                }).then(() => {
+                    this.novoCliente = {}
+                    this.clienteId = ''
+                    alert('Cliente atualizado com sucesso!')
+                    this.mudarClasse()
+                    this.listarClientes()
+                })
+            }
+                    
+        },
+        editarCliente(cliente) {
+            this.mudarClasse()
+            this.clienteId = cliente.idCliente
+            this.novoCliente = cliente                    
         }
     }
 }
@@ -195,7 +211,7 @@ export default {
         margin: 2.5%;
     }
 	@media only screen and (max-width: 800px){
-		.formCrud, .selectCrud{
+		.formCrud{
 			width: 80%;
 		}
 	}

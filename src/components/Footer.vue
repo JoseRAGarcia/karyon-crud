@@ -1,8 +1,7 @@
 <template>
   <footer>
       <div class="assinatura text-right">
-         Desenvolvido com
-         <md-icon id="heart">favorite</md-icon>
+         Desenvolvido 
          por <strong id="nome">José Garcia</strong>
       </div>
   </footer>
@@ -31,10 +30,6 @@ export default {
         font-weight: 300;
         font-size: 1.1rem;
         padding-right: 2%;
-    }
-
-    #heart{
-        color: red;
     }
 
     #nome{

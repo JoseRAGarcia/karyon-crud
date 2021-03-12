@@ -4,39 +4,39 @@
         <input type="search" placeholder="Pesquisar" class="form-control">
     </div>
     <hr>
-    <div id="hiden" class="hiden">        
-		<form @submit.prevent="">
+    <div id="hiden" class="hiden">       
+		<form @submit.prevent="salvarEquipamento">
 			<div class="formCrud form-group">				
-                <input list="equipamentos" placeholder="ID" class="form-control">
+                <input list="equipamentos" placeholder="ID" class="form-control" v-model="novoEquipamento.equipamento.id">
                 <datalist id="equipamentos" >                    
                     <option v-for="e in equipamentos" :key="e.id" :value="e.id"></option>                
                 </datalist>
-                <input list="fornecedores" placeholder="Fornecedor" class="form-control">
+                <input list="fornecedores" placeholder="Fornecedor" class="form-control" v-model="novoEquipamento.empresaDistribuidora">
                 <datalist id="fornecedores" >                    
                     <option v-for="f in fornecedores" :key="f.id" :value="f.descricao"></option>                
                 </datalist>
-                <input list="status" placeholder="Status" class="form-control">
+                <input list="status" placeholder="Status" class="form-control" v-model="novoEquipamento.status">
                 <datalist id="status" >                  
                     <option value="SO"></option>
                     <option value="CA"></option>
                     <option value="EU"></option>            
                 </datalist>
-                <input type="date" id="dataCancelamento">
+                <input type="date" id="dataCancelamento" v-model="novoEquipamento.dtCancelamento">
                 <label for="dataCancelamento">Data de Cancelamento</label>
-                <input type="text" id="nrSerial" placeholder="Nº de Série" class="form-control">
-                <input type="text"  id="observacao" placeholder="Observação" class="form-control">
-                <input type="text" id="estacao" placeholder="Estação" class="form-control">
+                <input type="text" id="nrSerial" placeholder="Nº de Série" class="form-control" v-model="novoEquipamento.nrSerial">
+                <input type="text"  id="observacao" placeholder="Observação" class="form-control" v-model="novoEquipamento.observacao">
+                <input type="text" id="estacao" placeholder="Estação" class="form-control" v-model="novoEquipamento.estacao">
 
                 <label class="select-cliente">
-                    <input type="checkbox" />
+                    <input type="checkbox" v-model="novoEquipamento.atualizarDriver" />
                     <span>Atualizar Driver?</span>
                 </label> 
 
                 
-                <input type="text" id="versaoDriver" placeholder="Versão de driver para atualização" class="form-control">
+                <input type="text" id="versaoDriver" placeholder="Versão de driver para atualização" class="form-control" v-model="novoEquipamento.versaoDriverAtualizacao">
                 <div>
                     <input type="submit" name="" value="ENVIAR" class="btn btn-primary btnFormGroup">
-                    <button @click="mudarClasse" class="btn btn-primary btnFormGroup">CANCELAR</button>
+                    <div @click="mudarClasse" class="btn btn-primary btnFormGroup">CANCELAR</div>
                 </div>
 			</div>
 		</form>
@@ -63,11 +63,7 @@
 		</thead>
         <tbody>
             <tr v-for="equipamento of equipamentosCliente" :key="equipamento.equipamento.id" >
-				<th scope="row">
-                    <router-link :to="{path: '/cliente/'}">
-                        <i class="material-icons" style="color: #2f4fa2">add</i>
-                    </router-link>
-                </th>
+				<th scope="row"></th>
                 <td>{{ equipamento.equipamento.id }}</td>
                 <td>{{ equipamento.equipamento.equipamento }}</td>
                 <td>{{ equipamento.empresaDistribuidora }}</td>
@@ -77,8 +73,8 @@
                 <td>{{ equipamento.observacao }}</td>
                 <td>{{ equipamento.estacao }}</td>
                 <td>{{ equipamento.atualizarDriver }}</td>          
-                <td><a href="#"><i class="material-icons" style="color: #2f4fa2">mode_edit</i></a></td>
-				<td><a href="#"><i class="material-icons" style="color: red">delete</i></a></td>
+                <td @click="editarEquipamento(equipamento)"><i class="material-icons" style="color: #2f4fa2; cursor: pointer">mode_edit</i></td>
+				<td><i class="material-icons" style="color: red; cursor: pointer">delete</i></td>
             </tr>
         </tbody>
       </table>
@@ -95,7 +91,29 @@ export default {
         return {
             equipamentosCliente: [],
             equipamentos: [],
-            fornecedores: []
+            fornecedores: [],
+            equipamentoId: '',
+            novoEquipamento: {
+                equipamento: {
+                    id: ''
+                },
+                status: '',
+                nrSerial: '',
+                observacao: '',
+                empresaDistribuidora: '',
+                dtCancelamento: '',
+                tipoSubstiticao: false,
+                idEquipamentoCliente: '',
+                servidorCliente: null,
+                dtValidade: null,
+                fatutadoPor: 0,
+                valorEquipamento: 0.0,
+                versaoDriver: '',
+                atualizarDriver: false,
+                versaoDriverAtualizacao: null,
+                estacao: null,
+                flagDiasSemExames: 0
+            }
         }
     },
 
@@ -107,19 +125,22 @@ export default {
     },
 
     async created() {
-        await http.get('equipamento-cliente/cliente/' + this.$route.params.idCliente, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
-                }            
-        }).then(res => {
-            this.equipamentosCliente = res.data
-            console.log(this.equipamentosCliente)
-        })
-        this.listaEquipamentos()
-        this.listaFornecedores()
+        this.listarEquipamentosCliente()
     },
 
     methods: {
+        listarEquipamentosCliente() {
+            http.get('equipamento-cliente/cliente/' + this.$route.params.idCliente, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }            
+            }).then(res => {
+                this.equipamentosCliente = res.data                
+            })
+            this.listaEquipamentos()
+            this.listaFornecedores()
+        },
+
         mudarClasse() {
             if(document.querySelector('#hiden').className == "hiden"){
                 document.querySelector('#hiden').className = "shown"; 
@@ -143,8 +164,39 @@ export default {
                 }
             }).then(res => {
                 this.fornecedores = res.data
-                console.log(this.fornecedores)
+                
             })
+        },
+        salvarEquipamento() {
+            if(this.equipamentoId == '') {
+                http.post('equipamento-cliente/cliente/' + this.$route.params.idCliente, this.novoEquipamento, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    } 
+                }).then(() => {
+                    this.novoEquipamento = {}
+                    alert('Equipamento salvo com sucesso!')
+                    this.mudarClasse()
+                    this.listarEquipamentosCliente()
+                })
+            }else{
+                http.put('equipamento-cliente/' + this.equipamentoId, this.novoEquipamento, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    } 
+                }).then(() => {
+                    this.novoEquipamento = {}
+                    alert('Equipamento atualizado com sucesso!')
+                    this.equipamentoId = ''
+                    this.mudarClasse()
+                    this.listarEquipamentosCliente()
+                })
+            }
+        },
+        editarEquipamento(equipamento) {
+            this.mudarClasse()
+            this.equipamentoId = equipamento.equipamento.id
+            this.novoEquipamento = equipamento
         }
     }
 

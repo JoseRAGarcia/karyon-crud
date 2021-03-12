@@ -7,9 +7,9 @@
       
     </div>
     <div class="md-layout-item md-subhead text-right main-menu"> 
-      <router-link to="/" class="menu">
-        <md-icon>home</md-icon><span>Home</span>
-      </router-link>
+      <a @click="logout" class="menu" style="cursor: pointer">
+        <md-icon>home</md-icon><span>Logout</span>
+      </a>
       <router-link to="/gerenciamento" class="menu">
         <md-icon>table_chart</md-icon><span>Gerenciar</span>
       </router-link> 
@@ -24,7 +24,18 @@
 <script>
 
 export default {
-  name: 'HeaderApp'
+  name: 'HeaderApp',
+  token: localStorage.getItem('token'),
+
+  methods: {
+    logout() {
+      if(confirm('Deseja fazer Logout?')){
+        localStorage.setItem('token', '')
+        this.$router.push('/')
+      }
+      
+    }
+  }
  
 }
 </script>

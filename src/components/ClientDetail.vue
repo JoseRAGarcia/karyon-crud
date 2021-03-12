@@ -58,7 +58,7 @@ export default {
             } 
         }).then(res => {
             this.cliente = res.data
-            console.log(this.cliente)
+            
         })
     },
 
