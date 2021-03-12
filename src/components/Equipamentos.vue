@@ -1,9 +1,5 @@
 <template>
-  <div class="fadeIn1 crud">
-     <div class="selectCrud form-group">        
-        <input type="search" placeholder="Pesquisar" class="form-control">
-    </div>
-    <hr>
+  <div class="fadeIn1 crud">     
     <div id="hiden" class="hiden">       
 		<form @submit.prevent="salvarEquipamento">
 			<div class="formCrud form-group">				
