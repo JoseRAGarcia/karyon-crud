@@ -118,6 +118,7 @@ export default {
     },
     
     methods: {
+        //Lista todos os clientes Facelab
         listarClientes() {
             http.get('cliente', {
                 headers: {
@@ -132,6 +133,8 @@ export default {
                
             })
         },
+
+        //Muda a classe hiden para cadastro ou atualização de um cliente
         mudarClasse() {
             if(document.querySelector('#hiden').className == "hiden"){
                 document.querySelector('#hiden').className = "shown"; 
@@ -139,6 +142,8 @@ export default {
                 document.querySelector('#hiden').className = "hiden"; 
             }                       
         },
+
+        //Faz o cadastro ou atualização de clientes
         salvarCliente() {
             if(this.clienteId == '') {
                 http.post('cliente', this.novoCliente, {
@@ -166,6 +171,8 @@ export default {
             }
                     
         },
+
+        //Prepara para a tualização do cliente
         editarCliente(cliente) {
             this.mudarClasse()
             this.clienteId = cliente.idCliente
